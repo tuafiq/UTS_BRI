@@ -6,14 +6,14 @@ void main() {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.light,
     ),
   );
 runApp(const BrimoApp());
 }
 
 class BrimoApp extends StatelessWidget {
-  const BrimoApp({Key? key}) : super(key: key );
+  const BrimoApp({Key? key}) : super(key: key);
   @override
 Widget build(BuildContext context) {
   return MaterialApp(
@@ -128,7 +128,7 @@ class _BrimoHomeScreenState extends State<BrimoHomeScreen> {
           IconButton(
             onPressed: () => setState(() => _isVisible = !_isVisible),
             icon: Icon(
-              _isVisible ? Icons.visibility : Icons.visibility_off
+              _isVisible ? Icons.visibility : Icons.visibility_off,
               color: Colors.white,
               size: 20,
             ),
@@ -139,7 +139,7 @@ class _BrimoHomeScreenState extends State<BrimoHomeScreen> {
     ],
   );
 
-  Widget _menuGrid() {
+ Widget _menuGrid() {
     final menu = [
       ["Tarik Tunai", Icons.payments, const Color(0xFFF47920)],
       ["Transfer", Icons.swap_horiz, const Color(0xFF005EAA)],
@@ -192,4 +192,194 @@ class _BrimoHomeScreenState extends State<BrimoHomeScreen> {
         ],
       ),
     );
+
+    // bagian yang di perbarui sesuai gambar
+    Widget _financialRecord() => _card(
+      child: Column(
+      children: [
+      IntrinsicHeight(
+        child: Row(
+          children: [
+            _stat("Pemasukan", "Rp0", Icons.arrow_downward, Colors.green),
+            const VerticalDivider(thickness: 1, color: Color(0xFFEEEEEE)),
+            _stat(
+              "Pengeluaran",
+              "Rp302.500",
+              Icons.arrow_upward,
+              const Color(0xFFE57373),
+            ),
+          ],
+        ),
+      ),
+    const SizedBox(height: 16),
+    const Divider(height: 1, thickness: 1, color: Color(0xFFEEEEEE)),
+    const SizedBox(height: 12),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Selisih ",
+          style: TextStyle(color: Colors.grey[500], fontSize: 13),
+        ),
+        Text(
+          "-Rp302.500",
+          style: const TextStyle(
+            color: Color(0xFFE57373),
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            ),
+          ),
+         ],
+        ),
+      ],
+    ),
+  );
+
+// Helper _stat yang diperbarui
+Widget _stat(String l, String v, IconData i, Color c) => Expanded(
+  child: Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(i, color: c, size: 14),
+          const SizedBox(width: 4),
+          Text(l, style: TextStyle(color: Colors.grey[500],fontSize: 13))
+        ],
+      ),
+      const SizedBox(height: 4),
+      Text(
+        v,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: Colors.black87,
+        ),
+      ),
+    ],
+  ),
+);
+
+//---HELPERS---
+
+TextStyle _style(double s, Color c, bool b) => TextStyle(
+  fontSize: s,
+  color: c,
+  fontWeight: b ? FontWeight.bold : FontWeight.normal,
+);
+
+Widget _sectionTitle(String t, {String? action}) => Padding(
+  padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(t, style: _style(16, const Color(0xFF004987), true)),
+      if (action != null) Text(action, style: _style(12, Colors.blue, true)),
+    ],
+  ),
+);
+
+Widget _card({required Widget child}) => Container(
+  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  padding: const EdgeInsets.all(16),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(16),
+    boxShadow: const [
+      BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 2)),
+    ],
+  ),
+  child: child,
+);
+
+Widget _walletItem(String n, String s, Color c) => Container(
+  width: 180,
+  margin: const EdgeInsets.only(right: 12),
+  decoration: BoxDecoration(
+  color: Colors.white,
+  borderRadius: BorderRadius.circular(12),
+  border: Border.all(color: Colors.black12),
+),
+child: ListTile(
+  leading: CircleAvatar(child: Icon(Icons.wallet, color: c)),
+  title: Text(n, style: TextStyle(color: c, fontSize: 12)),
+  subtitle: Text(s, style: TextStyle(color: c, fontSize: 12)),
+ ),
+);
+
+Widget _dot() => Container(
+  width: 12,
+  height: 12,
+  decoration: const BoxDecoration(
+    color: Colors.green,
+    shape: BoxShape.circle,
+    border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 2)),
+  ),
+);
+
+Widget _notif() => const Badge(
+  label: Text("17"),
+  child: Icon(Icons.notifications_none, color: Colors.white),
+);
+
+Widget _btnOutline(String t) => Container(
+  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.white),
+    borderRadius: BorderRadius.circular(20),
+  ),
+  child: Text(t, style: const TextStyle(color: Colors.white, fontSize: 12)),
+);
+
+Widget _fab() => FloatingActionButton(
+  onPressed: () {},
+  backgroundColor: const Color(0xFF005EAA),
+  shape: const CircleBorder(),
+  child: const Icon(Icons.qr_code_scanner, color: Colors.white),
+);
+
+Widget _bottomNav() => BottomAppBar(
+  shape: const CircularNotchedRectangle(),
+  notchMargin: 8,
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: [
+      _nav(Icons.home, "Home", true),
+      _nav(Icons.receipt, "Mutasi", false),
+      const SizedBox(width: 40),
+      _nav(Icons.mail, "Aktivasi", false),
+      _nav(Icons.person, "Akun", false),
+    ],
+  ),
+);
+
+Widget _nav(IconData i, String l, bool a) => Column(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    Icon(i, color: a ? Colors.blue : Colors.grey),
+    Text(
+      l,
+      style: TextStyle(fontSize: 10, color: a ? Colors.blue : Colors.grey),
+    ),
+  ],
+);
+}
+
+class BottomCurveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0, size.height - 40);
+    path.quadraticBezierTo(
+      size.width / 2,
+      size.height + 25,
+      size.width,
+      size.height - 40,
+    );
+    path.lineTo(size.width, 0);
+    return path..close();
+  }
+
+  @override
+  bool shouldReclip(oldClipper) => false;
 }
