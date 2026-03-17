@@ -26,3 +26,18 @@ Widget build(BuildContext context) {
   );
 }
 }
+
+class BrimoHomeScreen extends StatefulWidget {
+  const BrimoHomeScreen({Key? Key}) : super(key: Key);
+  @override
+  State<BrimoHomeScreen> createState() => _BrimoHomeScreenState();
+}
+
+class _BrimoHomeScreenState extends State<BrimoHomeScreen>{
+ bool _isVisible = false;
+
+ @override
+  Widget build(BuildContext context) {
+    return Scaffold()
+  }
+}
